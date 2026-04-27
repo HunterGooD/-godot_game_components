@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="ActorStatsResource" format=3 uid="uid://ck5ld6j7u7yud"]
+
+[ext_resource type="Script" uid="uid://bd2sc2tic323x" path="res://src/resources/actor_stats_resource.gd" id="1_42y4p"]
+
+[resource]
+script = ExtResource("1_42y4p")
+max_health = 10.0
+move_speed = 250.0
+dash_charges = 0
+metadata/_custom_type_script = "uid://bd2sc2tic323x"

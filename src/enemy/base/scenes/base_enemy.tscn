@@ -1,0 +1,39 @@
+[gd_scene format=3 uid="uid://1hn5nwslbvid"]
+
+[ext_resource type="Script" uid="uid://c7onwqsjlyuyl" path="res://src/enemy/base/scripts/base_enemy.gd" id="1_1irbq"]
+[ext_resource type="Texture2D" uid="uid://ca0e50i5oy880" path="res://icon.svg" id="1_rup1p"]
+[ext_resource type="Script" uid="uid://cg5f1alah2yup" path="res://src/components/hit_box_component.gd" id="2_dh483"]
+[ext_resource type="Script" uid="uid://bebnl6ixknhht" path="res://src/components/stats_component.gd" id="3_uud1u"]
+[ext_resource type="Resource" uid="uid://ck5ld6j7u7yud" path="res://src/enemy/base/resource/base_enemy.tres" id="4_78cgp"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_uud1u"]
+size = Vector2(114, 115)
+
+[node name="BaseEnemy" type="CharacterBody2D" unique_id=1084096259 node_paths=PackedStringArray("main_stats", "hit_box")]
+motion_mode = 1
+script = ExtResource("1_1irbq")
+main_stats = NodePath("StatsComponent")
+hit_box = NodePath("HitBoxComponent")
+
+[node name="Icon" type="Sprite2D" parent="." unique_id=246674871]
+modulate = Color(0.6901961, 0.60784316, 0, 1)
+texture = ExtResource("1_rup1p")
+
+[node name="HitBoxComponent" type="Area2D" parent="." unique_id=1308010012]
+script = ExtResource("2_dh483")
+metadata/_custom_type_script = "uid://cg5f1alah2yup"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitBoxComponent" unique_id=1625684110]
+position = Vector2(0, -1.5)
+shape = SubResource("RectangleShape2D_uud1u")
+debug_color = Color(0.8819079, 0, 0.43484753, 0.41960785)
+
+[node name="StatsComponent" type="Node" parent="." unique_id=938956210]
+script = ExtResource("3_uud1u")
+base_stats = ExtResource("4_78cgp")
+metadata/_custom_type_script = "uid://bebnl6ixknhht"
+
+[node name="Timer" type="Timer" parent="." unique_id=1826102794]
+autostart = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
