@@ -10,6 +10,6 @@ enum StatType {
 }
 
 enum Mode {
-	FLAT,  
+	FLAT,
 	MULTIPLY,
 }

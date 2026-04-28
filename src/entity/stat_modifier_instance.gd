@@ -7,6 +7,7 @@ var value: float
 var source_id: StringName = &""
 var tags: Array[StringName] = []
 
+
 func _init(
 	_stat_id: StatEnums.StatType,
 	_mode: StatEnums.Mode,

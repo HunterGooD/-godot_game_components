@@ -1,4 +1,4 @@
-﻿class_name StatsComponent
+class_name StatsComponent
 extends Node
 
 signal stats_changed(type: StatEnums.StatType, value: float)
@@ -7,16 +7,21 @@ signal stats_changed(type: StatEnums.StatType, value: float)
 
 var modifiers: Array[StatModifierInstance] = []
 
+
 func add_modifier(mod: StatModifierInstance) -> void:
 	modifiers.append(mod)
 	stats_changed.emit(mod.stat_type, mod.value)
 
+
 func remove_modifiers_by_source(source_id: StringName) -> void:
-	var idx: int = modifiers.find_custom(func(m: StatModifierInstance): return m.source_id == source_id)
+	var idx: int = modifiers.find_custom(
+		func(m: StatModifierInstance): return m.source_id == source_id
+	)
 	var mod: StatModifierInstance = modifiers.get(idx)
 	modifiers = modifiers.filter(func(m: StatModifierInstance): return m.source_id != source_id)
 	if mod != null:
 		stats_changed.emit(mod.stat_type, mod.value)
+
 
 func get_stat(stat_id: StatEnums.StatType) -> float:
 	var value := _get_base_value(stat_id)
@@ -31,20 +36,26 @@ func get_stat(stat_id: StatEnums.StatType) -> float:
 
 	return value
 
+
 func get_max_health() -> float:
 	return get_stat(StatEnums.StatType.MAX_HEALTH)
+
 
 func get_move_speed() -> float:
 	return get_stat(StatEnums.StatType.MOVE_SPEED)
 
+
 func get_armor() -> float:
 	return get_stat(StatEnums.StatType.ARMOR)
+
 
 func get_damage() -> float:
 	return get_stat(StatEnums.StatType.DAMAGE)
 
+
 func get_dash_charges() -> int:
 	return max(0, int(round(get_stat(StatEnums.StatType.DASH_CHARGES))))
+
 
 func _get_base_value(stat_id: StatEnums.StatType) -> float:
 	match stat_id:

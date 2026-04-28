@@ -1,4 +1,4 @@
-﻿class_name DirectionComponent
+class_name DirectionComponent
 extends Node
 
 @export var sprite_2d: Sprite2D
@@ -8,9 +8,11 @@ extends Node
 
 var facing: DirectionEnums.Facing
 
+
 func _ready() -> void:
 	action_component.last_direction.connect(_on_last_direction)
 	change_direction()
+
 
 func _on_last_direction(_direction: Vector2) -> void:
 	if _direction.length() == 0:
@@ -26,20 +28,21 @@ func _on_last_direction(_direction: Vector2) -> void:
 			facing = DirectionEnums.Facing.UP
 		else:
 			facing = DirectionEnums.Facing.DOWN
-	
+
 	change_direction()
+
 
 func change_direction() -> void:
 	change_sprite()
-	
+
 	if hit_box != null:
 		hit_box.flip_collision(facing)
 
 
 func change_sprite() -> void:
 	if sprite_2d == null:
-		return 
-	
+		return
+
 	match facing:
 		DirectionEnums.Facing.RIGHT:
 			sprite_2d.flip_h = false
