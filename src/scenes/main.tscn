@@ -9,5 +9,4 @@
 position = Vector2(90, 98)
 
 [node name="BaseEnemy" parent="." unique_id=1084096259 instance=ExtResource("2_rr2wm")]
-position = Vector2(511, 253)
-scale = Vector2(0.5, 0.5)
+position = Vector2(691, 272)

@@ -8,6 +8,12 @@
 [ext_resource type="Script" uid="uid://y1iqeamltkf3" path="res://src/components/move_component.gd" id="5_0drk1"]
 [ext_resource type="Script" uid="uid://dxb7pvo4ljcls" path="res://src/components/hurt_box_component.gd" id="6_1jmbm"]
 [ext_resource type="Texture2D" uid="uid://ca0e50i5oy880" path="res://icon.svg" id="6_svyy7"]
+[ext_resource type="Script" uid="uid://cwibng423aovi" path="res://src/components/weapon_component.gd" id="7_17xtp"]
+[ext_resource type="Script" uid="uid://dkr7ah2w28l73" path="res://src/components/combat_component.gd" id="8_aorow"]
+[ext_resource type="Resource" uid="uid://dvfn7htgoas32" path="res://src/player/base/resource/base_weapon_player.tres" id="8_k80la"]
+[ext_resource type="Script" uid="uid://c4elrlirrsy0c" path="res://src/components/action_component.gd" id="9_k80la"]
+[ext_resource type="Script" uid="uid://cg5f1alah2yup" path="res://src/components/hit_box_component.gd" id="10_qyjrk"]
+[ext_resource type="Script" uid="uid://dxouiqqvauj5" path="res://src/components/direction_component.gd" id="11_5j6mq"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_svyy7"]
 size = Vector2(115, 115)
@@ -15,7 +21,11 @@ size = Vector2(115, 115)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gbiam"]
 size = Vector2(99, 97)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_aorow"]
+size = Vector2(60, 122)
+
 [node name="Player" type="CharacterBody2D" unique_id=1922562164 node_paths=PackedStringArray("label", "healt_component")]
+collision_layer = 64
 motion_mode = 1
 script = ExtResource("1_gbiam")
 label = NodePath("hpBase")
@@ -23,8 +33,9 @@ healt_component = NodePath("Components/HealthComponent")
 
 [node name="Components" type="Node" parent="." unique_id=142842903]
 
-[node name="InputComponent" type="Node" parent="Components" unique_id=358222316]
+[node name="InputComponent" type="Node" parent="Components" unique_id=358222316 node_paths=PackedStringArray("action_component")]
 script = ExtResource("1_vk2b1")
+action_component = NodePath("../ActionComponent")
 metadata/_custom_type_script = "uid://c3qcyhdscf0bf"
 
 [node name="StatsComponent" type="Node" parent="Components" unique_id=1415653672]
@@ -44,6 +55,30 @@ main_stats = NodePath("../StatsComponent")
 move_direction = NodePath("../InputComponent")
 metadata/_custom_type_script = "uid://y1iqeamltkf3"
 
+[node name="WeaponComponent" type="Node" parent="Components" unique_id=395784193 node_paths=PackedStringArray("hit_box", "main_stats", "actor")]
+script = ExtResource("7_17xtp")
+hit_box = NodePath("../../HitBoxComponent")
+main_stats = NodePath("../StatsComponent")
+base_weapon_stats = ExtResource("8_k80la")
+actor = NodePath("../..")
+metadata/_custom_type_script = "uid://cwibng423aovi"
+
+[node name="CombatComponent" type="Node" parent="Components" unique_id=1290999527 node_paths=PackedStringArray("weapon_component", "action_component")]
+script = ExtResource("8_aorow")
+weapon_component = NodePath("../WeaponComponent")
+action_component = NodePath("../ActionComponent")
+metadata/_custom_type_script = "uid://dkr7ah2w28l73"
+
+[node name="ActionComponent" type="Node" parent="Components" unique_id=1645880299]
+script = ExtResource("9_k80la")
+
+[node name="DirectionComponent" type="Node" parent="Components" unique_id=1301725249 node_paths=PackedStringArray("sprite_2d", "hit_box", "hurt_box", "action_component")]
+script = ExtResource("11_5j6mq")
+sprite_2d = NodePath("../../Icon")
+hit_box = NodePath("../../HitBoxComponent")
+hurt_box = NodePath("../../HurtBoxComponent")
+action_component = NodePath("../ActionComponent")
+
 [node name="Icon" type="Sprite2D" parent="." unique_id=1651332600]
 texture = ExtResource("6_svyy7")
 
@@ -52,6 +87,8 @@ position = Vector2(-0.5, 0.5)
 shape = SubResource("RectangleShape2D_svyy7")
 
 [node name="HurtBoxComponent" type="Area2D" parent="." unique_id=1412644662 node_paths=PackedStringArray("health_component")]
+collision_layer = 2
+collision_mask = 16
 script = ExtResource("6_1jmbm")
 health_component = NodePath("../Components/HealthComponent")
 metadata/_custom_type_script = "uid://dxb7pvo4ljcls"
@@ -67,3 +104,17 @@ offset_top = -96.0
 offset_right = 30.0
 offset_bottom = -73.0
 text = "100/100"
+
+[node name="HitBoxComponent" type="Area2D" parent="." unique_id=238936847]
+collision_layer = 4
+collision_mask = 8
+script = ExtResource("10_qyjrk")
+offset_collision = Vector2(91, 91)
+metadata/_custom_type_script = "uid://cg5f1alah2yup"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitBoxComponent" unique_id=756208641]
+position = Vector2(0, 91)
+rotation = 1.5707964
+shape = SubResource("RectangleShape2D_aorow")
+disabled = true
+debug_color = Color(0.60967284, 0.53464615, 0.20770079, 0.41960785)

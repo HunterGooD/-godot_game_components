@@ -26,12 +26,12 @@ func apply_damage(damage_payload: DamageInstance) -> void:
 	if main_stats == null:
 		return
 		
-	print("getting damage", damage_payload)
+	print("getting damage", damage_payload, " flat ", damage_payload.amount)
 	
 	var damage := _apply_armor(damage_payload.amount)
 	current_hp -= damage
 	current_hp = clampf(current_hp, 0.0, max_hp)
-	
+	print("final damage ", damage)
 	hp_change.emit(current_hp, max_hp)
 	
 	if current_hp <= 0.0:

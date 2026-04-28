@@ -1,0 +1,35 @@
+﻿name: Refactor
+description: Улучшение архитектуры или читаемости без изменения фичи
+title: "[refactor][area] краткое описание"
+labels: ["refactor"]
+body:
+  - type: input
+    id: area
+    attributes:
+      label: Область
+      placeholder: combat / movement / stats / architecture
+    validations:
+      required: true
+
+  - type: textarea
+    id: reason
+    attributes:
+      label: Почему это надо менять
+    validations:
+      required: true
+
+  - type: textarea
+    id: scope
+    attributes:
+      label: Что именно меняем
+    validations:
+      required: true
+
+  - type: textarea
+    id: done
+    attributes:
+      label: Критерии готовности
+      placeholder: |
+        - [ ] Поведение не изменилось
+        - [ ] Код стал понятнее
+        - [ ] Точки расширения стали чище
