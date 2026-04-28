@@ -7,7 +7,6 @@ data_*/
 .import/
 
 export.cfg
-export_presets.cfg
 export_credentials.cfg
 *.tmp
 *.translation

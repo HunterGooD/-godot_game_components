@@ -1,4 +1,4 @@
-﻿class_name ActorStatsResource
+class_name ActorStatsResource
 extends Resource
 
 @export var max_health: float = 100.0

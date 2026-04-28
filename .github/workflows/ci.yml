@@ -1,0 +1,86 @@
+﻿name: CI
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - '**'
+    tags:
+      - 'v*'
+
+permissions:
+  contents: read
+
+env:
+  GODOT_VERSION: 4.6.1
+  GDSCRIPT_DIR: src
+
+jobs:
+  lint:
+    name: Lint GDScript
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install gdtoolkit
+        run: pip install "gdtoolkit==4.*"
+
+      - name: Run gdlint
+        run: gdlint "${{ env.GDSCRIPT_DIR }}"
+
+  import-check:
+    name: Godot import check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: chickensoft-games/setup-godot@v2
+        with:
+          version: ${{ env.GODOT_VERSION }}
+          use-dotnet: false
+
+      - name: Import project
+        run: godot --headless --import
+
+  export-linux:
+    name: Godot export Linux
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: chickensoft-games/setup-godot@v2
+        with:
+          version: ${{ env.GODOT_VERSION }}
+          use-dotnet: false
+          include-templates: true
+
+      - name: Prepare build dir
+        run: mkdir -p build/linux
+
+      - name: Export Linux build
+        run: godot --headless --export-release "Linux" "build/linux/game.x86_64"
+
+  export-windows:
+    name: Godot export Windows
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: chickensoft-games/setup-godot@v2
+        with:
+          version: ${{ env.GODOT_VERSION }}
+          use-dotnet: false
+          include-templates: true
+
+      - name: Prepare build dir
+        run: mkdir -p build/windows
+
+      - name: Export Windows build
+        run: godot --headless --export-release "Windows Desktop" "build/windows/game.exe"

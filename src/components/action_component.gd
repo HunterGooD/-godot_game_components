@@ -1,4 +1,4 @@
-﻿class_name ActionComponent
+class_name ActionComponent
 extends Node
 
 signal dash_action

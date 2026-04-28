@@ -1,4 +1,4 @@
-﻿class_name DirectionEnums
+class_name DirectionEnums
 extends RefCounted
 
 enum Facing {
