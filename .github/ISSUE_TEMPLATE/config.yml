@@ -1,0 +1,5 @@
+﻿blank_issues_enabled: false
+contact_links:
+  - name: Design notes
+    url: https://github.com/HunterGooD/-godot_game_components/discussions
+    about: Идеи, размышления и обсуждения без создания issue

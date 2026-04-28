@@ -1,0 +1,46 @@
+﻿name: Bug report
+description: Исправление ошибки
+title: "[bug][area] краткое описание"
+labels: ["bug"]
+body:
+  - type: input
+    id: area
+    attributes:
+      label: Область
+      placeholder: combat / movement / stats / enemy / ui
+    validations:
+      required: true
+
+  - type: textarea
+    id: current
+    attributes:
+      label: Что происходит сейчас
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Что должно происходить
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Как воспроизвести
+      placeholder: |
+        1. ...
+        2. ...
+        3. ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: done
+    attributes:
+      label: Критерии готовности
+      placeholder: |
+        - [ ] Баг воспроизводился
+        - [ ] Баг исправлен
+        - [ ] Регрессии не появилось

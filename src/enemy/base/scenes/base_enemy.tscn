@@ -5,35 +5,103 @@
 [ext_resource type="Script" uid="uid://cg5f1alah2yup" path="res://src/components/hit_box_component.gd" id="2_dh483"]
 [ext_resource type="Script" uid="uid://bebnl6ixknhht" path="res://src/components/stats_component.gd" id="3_uud1u"]
 [ext_resource type="Resource" uid="uid://ck5ld6j7u7yud" path="res://src/enemy/base/resource/base_enemy.tres" id="4_78cgp"]
+[ext_resource type="Script" uid="uid://ccu2ybkofg6gc" path="res://src/components/health_component.gd" id="4_lifyf"]
+[ext_resource type="Script" uid="uid://dxb7pvo4ljcls" path="res://src/components/hurt_box_component.gd" id="6_c0wci"]
+[ext_resource type="Script" uid="uid://cwibng423aovi" path="res://src/components/weapon_component.gd" id="8_sp62j"]
+[ext_resource type="Resource" uid="uid://cuysvpgxfhldi" path="res://src/enemy/base/resource/weapon_base_enemy.tres" id="9_4qe5a"]
+[ext_resource type="Script" uid="uid://dkr7ah2w28l73" path="res://src/components/combat_component.gd" id="10_21y6h"]
+[ext_resource type="Script" uid="uid://c4elrlirrsy0c" path="res://src/components/action_component.gd" id="11_w0hon"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1irbq"]
+size = Vector2(110, 115)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_c0wci"]
+size = Vector2(132, 131)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_uud1u"]
-size = Vector2(114, 115)
+size = Vector2(115, 121)
 
-[node name="BaseEnemy" type="CharacterBody2D" unique_id=1084096259 node_paths=PackedStringArray("main_stats", "hit_box")]
+[node name="BaseEnemy" type="CharacterBody2D" unique_id=1084096259 node_paths=PackedStringArray("main_stats", "label", "healt_component", "attack_timer", "action_component")]
+collision_layer = 64
 motion_mode = 1
 script = ExtResource("1_1irbq")
-main_stats = NodePath("StatsComponent")
-hit_box = NodePath("HitBoxComponent")
+main_stats = NodePath("Components/StatsComponent")
+label = NodePath("hpBase")
+healt_component = NodePath("Components/HealthComponent")
+attack_timer = NodePath("AttackTimer")
+action_component = NodePath("Components/ActionComponent")
 
 [node name="Icon" type="Sprite2D" parent="." unique_id=246674871]
 modulate = Color(0.6901961, 0.60784316, 0, 1)
 texture = ExtResource("1_rup1p")
 
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1152959792]
+position = Vector2(-1, -1.5)
+shape = SubResource("RectangleShape2D_1irbq")
+
+[node name="HurtBoxComponent" type="Area2D" parent="." unique_id=543646958 node_paths=PackedStringArray("health_component")]
+collision_layer = 8
+collision_mask = 4
+script = ExtResource("6_c0wci")
+health_component = NodePath("../Components/HealthComponent")
+metadata/_custom_type_script = "uid://dxb7pvo4ljcls"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBoxComponent" unique_id=1373546523]
+position = Vector2(0, -0.5)
+shape = SubResource("RectangleShape2D_c0wci")
+debug_color = Color(0.66295314, 0.5135215, 0, 0.41960785)
+
 [node name="HitBoxComponent" type="Area2D" parent="." unique_id=1308010012]
+collision_layer = 16
+collision_mask = 2
 script = ExtResource("2_dh483")
 metadata/_custom_type_script = "uid://cg5f1alah2yup"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitBoxComponent" unique_id=1625684110]
-position = Vector2(0, -1.5)
+position = Vector2(-0.5, -0.5)
 shape = SubResource("RectangleShape2D_uud1u")
 debug_color = Color(0.8819079, 0, 0.43484753, 0.41960785)
 
-[node name="StatsComponent" type="Node" parent="." unique_id=938956210]
+[node name="hpBase" type="Label" parent="." unique_id=1963461450]
+offset_left = -31.0
+offset_top = -93.0
+offset_right = 31.0
+offset_bottom = -70.0
+text = "100/100"
+metadata/_edit_use_anchors_ = true
+
+[node name="Components" type="Node" parent="." unique_id=346621646]
+
+[node name="HealthComponent" type="Node" parent="Components" unique_id=829505028 node_paths=PackedStringArray("main_stats")]
+script = ExtResource("4_lifyf")
+main_stats = NodePath("../StatsComponent")
+metadata/_custom_type_script = "uid://ccu2ybkofg6gc"
+
+[node name="StatsComponent" type="Node" parent="Components" unique_id=938956210]
 script = ExtResource("3_uud1u")
 base_stats = ExtResource("4_78cgp")
 metadata/_custom_type_script = "uid://bebnl6ixknhht"
 
-[node name="Timer" type="Timer" parent="." unique_id=1826102794]
+[node name="WeaponComponent" type="Node" parent="Components" unique_id=230433081 node_paths=PackedStringArray("hit_box", "main_stats", "actor")]
+script = ExtResource("8_sp62j")
+hit_box = NodePath("../../HitBoxComponent")
+main_stats = NodePath("../StatsComponent")
+base_weapon_stats = ExtResource("9_4qe5a")
+actor = NodePath("../..")
+metadata/_custom_type_script = "uid://cwibng423aovi"
+
+[node name="CombatComponent" type="Node" parent="Components" unique_id=1914606940 node_paths=PackedStringArray("weapon_component", "action_component")]
+script = ExtResource("10_21y6h")
+weapon_component = NodePath("../WeaponComponent")
+action_component = NodePath("../ActionComponent")
+metadata/_custom_type_script = "uid://dkr7ah2w28l73"
+
+[node name="ActionComponent" type="Node" parent="Components" unique_id=907331711]
+script = ExtResource("11_w0hon")
+metadata/_custom_type_script = "uid://c4elrlirrsy0c"
+
+[node name="AttackTimer" type="Timer" parent="." unique_id=1870037849]
+wait_time = 2.0
 autostart = true
 
-[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="timeout" from="AttackTimer" to="." method="_on_attack_timer_timeout"]

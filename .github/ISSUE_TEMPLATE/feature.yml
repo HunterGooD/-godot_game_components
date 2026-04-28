@@ -1,0 +1,35 @@
+﻿name: Feature
+description: Новая механика или расширение текущей
+title: "[feature][area] краткое описание"
+labels: ["feature"]
+body:
+  - type: input
+    id: area
+    attributes:
+      label: Область
+      placeholder: combat / enemy / animation / ui
+    validations:
+      required: true
+
+  - type: textarea
+    id: goal
+    attributes:
+      label: Цель
+    validations:
+      required: true
+
+  - type: textarea
+    id: behavior
+    attributes:
+      label: Как это должно работать
+    validations:
+      required: true
+
+  - type: textarea
+    id: done
+    attributes:
+      label: Критерии готовности
+      placeholder: |
+        - [ ] ...
+        - [ ] ...
+        - [ ] ...
