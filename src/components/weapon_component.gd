@@ -45,7 +45,7 @@ func _ready() -> void:
 	timer_attack_delay.wait_time = base_weapon_stats.delay_attack
 	timer_attack_delay.one_shot = true
 	add_child(timer_attack_delay)
-	
+
 	timer_attack_delay.timeout.connect(_on_attack_delay)
 	timer_active_attack.timeout.connect(_on_attack_timer_timeout)
 	timer_recovery_attack.timeout.connect(_on_colldown_timer_timeout)
@@ -58,9 +58,9 @@ func try_attack() -> bool:
 
 	if timer_attack_delay == null:
 		push_warning("time attack delay is null in weapon component")
-	
+
 	timer_attack_delay.start()
-	
+
 	return true
 
 
@@ -77,15 +77,17 @@ func _on_attack_timer_timeout() -> void:
 	attack_finished.emit()
 	timer_recovery_attack.start()
 
+
 func _on_attack_delay() -> void:
 	if timer_active_attack == null:
 		push_warning("timer attacl is null for weapon componment")
 		return
-		
+
 	attack_available = false
 	hit_box.payload = DamageInstance.new(_get_damage(), actor)
 	hit_box.enable_collision()
 	timer_active_attack.start()
+
 
 func _on_colldown_timer_timeout() -> void:
 	attack_available = true

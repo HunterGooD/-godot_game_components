@@ -27,5 +27,6 @@ func _on_attack_action() -> void:
 		print("attack finished!!!!!!!!!!!!!")
 		action_component.attack_finished.emit()
 
-func _on_attack_finished(): 
+
+func _on_attack_finished():
 	action_component.attack_finished.emit()
