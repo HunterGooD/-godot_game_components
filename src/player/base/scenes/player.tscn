@@ -25,7 +25,7 @@ size = Vector2(99, 97)
 size = Vector2(60, 122)
 
 [node name="Player" type="CharacterBody2D" unique_id=1922562164 node_paths=PackedStringArray("label", "healt_component")]
-collision_layer = 64
+collision_layer = 8256
 motion_mode = 1
 script = ExtResource("1_gbiam")
 label = NodePath("hpBase")
@@ -104,15 +104,17 @@ offset_top = -96.0
 offset_right = 30.0
 offset_bottom = -73.0
 text = "100/100"
+metadata/_edit_use_anchors_ = true
 
-[node name="HitBoxComponent" type="Area2D" parent="." unique_id=238936847]
+[node name="HitBoxComponent" type="Area2D" parent="." unique_id=238936847 node_paths=PackedStringArray("collision_shape")]
 collision_layer = 4
 collision_mask = 8
 script = ExtResource("10_qyjrk")
 offset_collision = Vector2(91, 91)
+collision_shape = NodePath("HitBoxCollision")
 metadata/_custom_type_script = "uid://cg5f1alah2yup"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="HitBoxComponent" unique_id=756208641]
+[node name="HitBoxCollision" type="CollisionShape2D" parent="HitBoxComponent" unique_id=756208641]
 position = Vector2(0, 91)
 rotation = 1.5707964
 shape = SubResource("RectangleShape2D_aorow")

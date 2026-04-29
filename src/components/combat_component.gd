@@ -14,6 +14,7 @@ func _ready() -> void:
 		push_warning("_ready() weapon component is null for combat component")
 
 	action_component.attack_action.connect(_on_attack_action)
+	weapon_component.attack_finished.connect(_on_attack_finished)
 
 
 func _on_attack_action() -> void:
@@ -21,4 +22,10 @@ func _on_attack_action() -> void:
 		push_warning("_on_attack_action() weapon component is null for combat component")
 		return
 
-	weapon_component.try_attack()
+	print("attack!!!!!!!!!!!!!")
+	if not weapon_component.try_attack():
+		print("attack finished!!!!!!!!!!!!!")
+		action_component.attack_finished.emit()
+
+func _on_attack_finished(): 
+	action_component.attack_finished.emit()
