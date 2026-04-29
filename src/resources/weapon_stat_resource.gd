@@ -6,3 +6,4 @@ extends Resource
 @export var combo_delay: float = 0.1
 @export var active_time: float = 1.0
 @export var recovery_time: float = 0.5
+@export var delay_attack: float = 0.1

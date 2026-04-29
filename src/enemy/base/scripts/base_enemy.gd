@@ -3,7 +3,6 @@ extends CharacterBody2D
 @export var main_stats: StatsComponent
 @export var label: Label
 @export var healt_component: HealthComponent
-@export var action_component: ActionComponent
 
 
 func _ready() -> void:
@@ -24,7 +23,3 @@ func set_text(current_hp: float, max_hp: float) -> void:
 		return
 
 	label.text = str(int(current_hp), "/", int(max_hp))
-
-
-func _on_attack_timer_timeout() -> void:
-	action_component.attack_action.emit()

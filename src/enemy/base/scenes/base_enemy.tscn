@@ -11,6 +11,9 @@
 [ext_resource type="Resource" uid="uid://cuysvpgxfhldi" path="res://src/enemy/base/resource/weapon_base_enemy.tres" id="9_4qe5a"]
 [ext_resource type="Script" uid="uid://dkr7ah2w28l73" path="res://src/components/combat_component.gd" id="10_21y6h"]
 [ext_resource type="Script" uid="uid://c4elrlirrsy0c" path="res://src/components/action_component.gd" id="11_w0hon"]
+[ext_resource type="Script" uid="uid://dcfoqqvmrudml" path="res://src/components/enemy_ai_component.gd" id="12_7hmfk"]
+[ext_resource type="Script" uid="uid://dih5v3onixtax" path="res://src/components/detection_component.gd" id="12_w0hon"]
+[ext_resource type="Script" uid="uid://y1iqeamltkf3" path="res://src/components/move_component.gd" id="13_ct7tj"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1irbq"]
 size = Vector2(110, 115)
@@ -18,18 +21,26 @@ size = Vector2(110, 115)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_c0wci"]
 size = Vector2(132, 131)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_uud1u"]
-size = Vector2(115, 121)
+[sub_resource type="CircleShape2D" id="CircleShape2D_7hmfk"]
+radius = 449.16034
 
-[node name="BaseEnemy" type="CharacterBody2D" unique_id=1084096259 node_paths=PackedStringArray("main_stats", "label", "healt_component", "attack_timer", "action_component")]
-collision_layer = 64
+[sub_resource type="CircleShape2D" id="CircleShape2D_w0hon"]
+radius = 597.03015
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_s2kqi"]
+radius = 126.57014
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ct7tj"]
+radius = 173.66203
+
+[node name="BaseEnemy" type="CharacterBody2D" unique_id=1084096259 node_paths=PackedStringArray("main_stats", "label", "healt_component")]
+collision_layer = 4160
+collision_mask = 4097
 motion_mode = 1
 script = ExtResource("1_1irbq")
 main_stats = NodePath("Components/StatsComponent")
 label = NodePath("hpBase")
 healt_component = NodePath("Components/HealthComponent")
-attack_timer = NodePath("AttackTimer")
-action_component = NodePath("Components/ActionComponent")
 
 [node name="Icon" type="Sprite2D" parent="." unique_id=246674871]
 modulate = Color(0.6901961, 0.60784316, 0, 1)
@@ -50,17 +61,6 @@ metadata/_custom_type_script = "uid://dxb7pvo4ljcls"
 position = Vector2(0, -0.5)
 shape = SubResource("RectangleShape2D_c0wci")
 debug_color = Color(0.66295314, 0.5135215, 0, 0.41960785)
-
-[node name="HitBoxComponent" type="Area2D" parent="." unique_id=1308010012]
-collision_layer = 16
-collision_mask = 2
-script = ExtResource("2_dh483")
-metadata/_custom_type_script = "uid://cg5f1alah2yup"
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="HitBoxComponent" unique_id=1625684110]
-position = Vector2(-0.5, -0.5)
-shape = SubResource("RectangleShape2D_uud1u")
-debug_color = Color(0.8819079, 0, 0.43484753, 0.41960785)
 
 [node name="hpBase" type="Label" parent="." unique_id=1963461450]
 offset_left = -31.0
@@ -100,8 +100,58 @@ metadata/_custom_type_script = "uid://dkr7ah2w28l73"
 script = ExtResource("11_w0hon")
 metadata/_custom_type_script = "uid://c4elrlirrsy0c"
 
-[node name="AttackTimer" type="Timer" parent="." unique_id=1870037849]
-wait_time = 2.0
-autostart = true
+[node name="EnemyAiComponent" type="Node" parent="Components" unique_id=1984556971 node_paths=PackedStringArray("aggro_range", "lose_range", "attack_range", "enemy", "action_component")]
+script = ExtResource("12_7hmfk")
+aggro_range = NodePath("../../AgroDetectionComponent")
+lose_range = NodePath("../../LoseDetectionComponent")
+attack_range = NodePath("../../AttackDetectionComponent")
+enemy = NodePath("../..")
+action_component = NodePath("../ActionComponent")
+metadata/_custom_type_script = "uid://dcfoqqvmrudml"
 
-[connection signal="timeout" from="AttackTimer" to="." method="_on_attack_timer_timeout"]
+[node name="MoveComponent" type="Node" parent="Components" unique_id=1674350840 node_paths=PackedStringArray("target", "main_stats", "move_direction")]
+script = ExtResource("13_ct7tj")
+target = NodePath("../..")
+main_stats = NodePath("../StatsComponent")
+move_direction = NodePath("../EnemyAiComponent")
+metadata/_custom_type_script = "uid://y1iqeamltkf3"
+
+[node name="AgroDetectionComponent" type="Area2D" parent="." unique_id=1744180741]
+collision_layer = 4096
+collision_mask = 8192
+script = ExtResource("12_w0hon")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AgroDetectionComponent" unique_id=32566466]
+shape = SubResource("CircleShape2D_7hmfk")
+debug_color = Color(0.6064978, 0.532001, 0.28169528, 0.41960785)
+
+[node name="LoseDetectionComponent" type="Area2D" parent="." unique_id=318210583]
+collision_layer = 4096
+collision_mask = 8192
+script = ExtResource("12_w0hon")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LoseDetectionComponent" unique_id=937626595]
+shape = SubResource("CircleShape2D_w0hon")
+debug_color = Color(0, 0.64318174, 0.31022352, 0.41960785)
+
+[node name="AttackDetectionComponent" type="Area2D" parent="." unique_id=1863431072]
+collision_layer = 4096
+collision_mask = 8192
+script = ExtResource("12_w0hon")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackDetectionComponent" unique_id=802833423]
+shape = SubResource("CircleShape2D_s2kqi")
+debug_color = Color(0.15569276, 0.5733795, 0.79959935, 0.41960785)
+
+[node name="HitBoxComponent" type="Area2D" parent="." unique_id=1308010012 node_paths=PackedStringArray("collision_shape")]
+collision_layer = 16
+collision_mask = 2
+script = ExtResource("2_dh483")
+collision_shape = NodePath("CollisionShape2D")
+metadata/_custom_type_script = "uid://cg5f1alah2yup"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitBoxComponent" unique_id=1625684110]
+position = Vector2(-0.5, -0.5)
+shape = SubResource("CircleShape2D_ct7tj")
+disabled = true
+debug_color = Color(0.8589008, 8.374751e-06, 0.56415135, 0.41960785)
