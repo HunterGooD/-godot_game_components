@@ -1,7 +1,7 @@
 class_name StatsComponent
 extends Node
 
-signal stats_changed(type: StatEnums.StatType, value: float)
+signal stats_changed
 
 @export var base_stats: ActorStatsResource
 
@@ -10,18 +10,16 @@ var modifiers: Array[StatModifierInstance] = []
 
 func add_modifier(mod: StatModifierInstance) -> void:
 	modifiers.append(mod)
-	stats_changed.emit(mod.stat_type, mod.value)
+	stats_changed.emit()
 
 
 func remove_modifiers_by_source(source_id: StringName) -> void:
 	var idx: int = modifiers.find_custom(
 		func(m: StatModifierInstance): return m.source_id == source_id
 	)
-	var mod: StatModifierInstance = modifiers.get(idx)
-	modifiers = modifiers.filter(func(m: StatModifierInstance): return m.source_id != source_id)
-	if mod != null:
-		stats_changed.emit(mod.stat_type, mod.value)
-
+	if idx != -1:
+		modifiers.remove_at(idx)
+		stats_changed.emit()
 
 func get_stat(stat_id: StatEnums.StatType) -> float:
 	var value := _get_base_value(stat_id)

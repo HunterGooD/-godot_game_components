@@ -55,7 +55,8 @@ func apply_heal(ammount: float) -> void:
 	hp_change.emit(current_hp, max_hp)
 
 
-func _on_stats_changed(stat_type: StatEnums.StatType, value: float):
-	if stat_type == StatEnums.StatType.MAX_HEALTH:
-		max_hp += value
-		current_hp += value
+func _on_stats_changed():
+	var new_max_hp: float = main_stats.get_max_health()
+	if max_hp != new_max_hp:
+		max_hp = new_max_hp
+		current_hp += new_max_hp - max_hp
