@@ -15,6 +15,7 @@ func _ready() -> void:
 
 	action_component.attack_action.connect(_on_attack_action)
 	weapon_component.attack_finished.connect(_on_attack_finished)
+	weapon_component.attack_ready.connect(_on_attack_ready)
 
 
 func _on_attack_action() -> void:
@@ -30,3 +31,7 @@ func _on_attack_action() -> void:
 
 func _on_attack_finished():
 	action_component.attack_finished.emit()
+
+
+func _on_attack_ready():
+	action_component.attack_ready.emit()
