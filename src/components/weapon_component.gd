@@ -2,6 +2,7 @@ class_name WeaponComponent
 extends Node
 
 signal attack_finished
+signal attack_ready
 
 @export var hit_box: HitBoxComponent
 @export var main_stats: StatsComponent
@@ -58,7 +59,9 @@ func try_attack() -> bool:
 
 	if timer_attack_delay == null:
 		push_warning("time attack delay is null in weapon component")
+		return false
 
+	attack_available = false
 	timer_attack_delay.start()
 
 	return true
@@ -83,7 +86,6 @@ func _on_attack_delay() -> void:
 		push_warning("timer attacl is null for weapon componment")
 		return
 
-	attack_available = false
 	hit_box.payload = DamageInstance.new(_get_damage(), actor)
 	hit_box.enable_collision()
 	timer_active_attack.start()
@@ -91,3 +93,4 @@ func _on_attack_delay() -> void:
 
 func _on_colldown_timer_timeout() -> void:
 	attack_available = true
+	attack_ready.emit()
