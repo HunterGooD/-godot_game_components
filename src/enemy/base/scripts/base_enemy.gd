@@ -31,6 +31,7 @@ func _on_died_signal() -> void:
 	set_process(false)
 	var event: ActorDeathEvent = ActorDeathEvent.new()
 	event.actor = self
+	event.actor_kind = &"enemy"
 #	event.killer = NULL # подумать как тут получать того кто убил
 	event.position = position
 	event.xp = 10

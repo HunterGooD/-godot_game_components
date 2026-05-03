@@ -59,6 +59,6 @@ func _on_stats_changed():
 	var new_max_hp: float = main_stats.get_max_health()
 	print("new max hp ", new_max_hp, " current hp ", max_hp)
 	if max_hp != new_max_hp:
-		current_hp = clampf(current_hp + (new_max_hp - max_hp), 0.0, max_hp)
+		current_hp = clampf(current_hp + (new_max_hp - max_hp), 0.0, new_max_hp)
 		max_hp = new_max_hp
 		hp_change.emit(current_hp, max_hp)

@@ -73,7 +73,7 @@ func _on_run_victory() -> void:
 	victory_run()
 
 
-func _on_level_up(_new_level: int) -> void:
+func _on_level_up() -> void:
 	if state != RunState.RUNNING:
 		return
 
