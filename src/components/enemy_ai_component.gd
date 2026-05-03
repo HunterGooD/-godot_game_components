@@ -34,6 +34,7 @@ func _ready() -> void:
 
 	action_component.attack_finished.connect(_on_attack_finished)
 	action_component.attack_ready.connect(_on_attack_ready)
+	action_component.attack_cancelled.connect(_on_attack_cancelled)
 
 
 func get_vector() -> Vector2:
@@ -52,6 +53,12 @@ func get_vector() -> Vector2:
 
 
 func change_state(next_state: ActorState.BaseState) -> void:
+	print(
+		"change states ",
+		ActorState.BaseState.keys()[state],
+		ActorState.BaseState.keys()[next_state]
+	)
+
 	if state == next_state:
 		return
 
@@ -72,7 +79,12 @@ func change_state(next_state: ActorState.BaseState) -> void:
 			return
 
 	var previous_state := state
-	print("asdasdasd")
+	print(
+		"change states ",
+		ActorState.BaseState.keys()[state],
+		" -> ",
+		ActorState.BaseState.keys()[next_state]
+	)
 	_exit_state(previous_state)
 	state = next_state
 	_enter_state(next_state)
@@ -121,7 +133,16 @@ func _on_aggro_body_entered(body: Node2D) -> void:
 
 
 func _on_lose_body_exited(body: Node2D) -> void:
-	print("exited", body)
+	print(
+		"exited",
+		body,
+		" TARGET ",
+		target,
+		" iis attack range ",
+		target_in_attack_range,
+		" state ",
+		ActorState.BaseState.keys()[state]
+	)
 	if body != target:
 		return
 
@@ -166,6 +187,15 @@ func _on_attack_finished() -> void:
 		return
 
 	change_state(ActorState.BaseState.IDLE)
+
+
+func _on_attack_cancelled() -> void:
+	is_attacking = false
+
+	if target_in_attack_range:
+		change_state(ActorState.BaseState.IDLE)
+		return
+	change_state(ActorState.BaseState.RUN)
 
 
 func _on_attack_ready() -> void:

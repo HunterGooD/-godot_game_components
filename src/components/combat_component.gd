@@ -23,10 +23,10 @@ func _on_attack_action() -> void:
 		push_warning("_on_attack_action() weapon component is null for combat component")
 		return
 
-	print("attack!!!!!!!!!!!!!")
 	if not weapon_component.try_attack():
-		print("attack finished!!!!!!!!!!!!!")
-		action_component.attack_finished.emit()
+		print("attack ignored: weapon not ready")
+		action_component.attack_cancelled.emit()
+		return
 
 
 func _on_attack_finished():
