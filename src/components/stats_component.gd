@@ -21,6 +21,7 @@ func remove_modifiers_by_source(source_id: StringName) -> void:
 		modifiers.remove_at(idx)
 		stats_changed.emit()
 
+
 func get_stat(stat_id: StatEnums.StatType) -> float:
 	var value := _get_base_value(stat_id)
 

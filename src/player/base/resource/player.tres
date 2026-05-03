@@ -4,6 +4,7 @@
 
 [resource]
 script = ExtResource("1_kkcf0")
+max_health = 10.0
 move_speed = 500.0
 armor = 5.0
 damage = 0.0

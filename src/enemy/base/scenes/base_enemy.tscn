@@ -67,7 +67,6 @@ offset_left = -31.0
 offset_top = -93.0
 offset_right = 31.0
 offset_bottom = -70.0
-text = "100/100"
 metadata/_edit_use_anchors_ = true
 
 [node name="Components" type="Node" parent="." unique_id=346621646]

@@ -14,6 +14,7 @@
 [ext_resource type="Script" uid="uid://c4elrlirrsy0c" path="res://src/components/action_component.gd" id="9_k80la"]
 [ext_resource type="Script" uid="uid://cg5f1alah2yup" path="res://src/components/hit_box_component.gd" id="10_qyjrk"]
 [ext_resource type="Script" uid="uid://dxouiqqvauj5" path="res://src/components/direction_component.gd" id="11_5j6mq"]
+[ext_resource type="Script" uid="uid://d3edg0nruhurm" path="res://src/components/reward_component.gd" id="12_6qwt8"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_svyy7"]
 size = Vector2(115, 115)
@@ -78,6 +79,10 @@ sprite_2d = NodePath("../../Icon")
 hit_box = NodePath("../../HitBoxComponent")
 hurt_box = NodePath("../../HurtBoxComponent")
 action_component = NodePath("../ActionComponent")
+
+[node name="RewardComponent" type="Node" parent="Components" unique_id=359244830 node_paths=PackedStringArray("main_stats")]
+script = ExtResource("12_6qwt8")
+main_stats = NodePath("../StatsComponent")
 
 [node name="Icon" type="Sprite2D" parent="." unique_id=1651332600]
 texture = ExtResource("6_svyy7")

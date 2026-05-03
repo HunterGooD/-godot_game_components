@@ -1,12 +1,48 @@
 [gd_scene format=3 uid="uid://cbgfqwdg421av"]
 
+[ext_resource type="Script" uid="uid://f7u7smexlhty" path="res://src/enemy/base/scripts/main.gd" id="1_32aa5"]
 [ext_resource type="PackedScene" uid="uid://c7evpgqq0f7fi" path="res://src/player/base/scenes/player.tscn" id="1_kkvs4"]
 [ext_resource type="PackedScene" uid="uid://1hn5nwslbvid" path="res://src/enemy/base/scenes/base_enemy.tscn" id="2_rr2wm"]
 
-[node name="Main" type="Node2D" unique_id=627861377]
+[node name="Main" type="Node2D" unique_id=627861377 node_paths=PackedStringArray("rect")]
+script = ExtResource("1_32aa5")
+rect = NodePath("Node/ColorRect")
 
 [node name="Player" parent="." unique_id=1922562164 instance=ExtResource("1_kkvs4")]
 position = Vector2(90, 98)
 
 [node name="BaseEnemy" parent="." unique_id=1084096259 instance=ExtResource("2_rr2wm")]
 position = Vector2(1762, 461)
+
+[node name="Node" type="Node" parent="." unique_id=1555415963]
+process_mode = 2
+
+[node name="ColorRect" type="ColorRect" parent="Node" unique_id=1726604372]
+visible = false
+offset_right = 1917.0
+offset_bottom = 1082.0
+color = Color(0, 0, 0, 0.42745098)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Node/ColorRect" unique_id=1710893138]
+layout_mode = 0
+offset_right = 1928.0
+offset_bottom = 1081.0
+alignment = 1
+
+[node name="Label" type="Label" parent="Node/ColorRect/VBoxContainer" unique_id=1607824895]
+layout_mode = 2
+theme_override_font_sizes/font_size = 128
+text = "GAME OVER"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BoxContainer" type="BoxContainer" parent="Node/ColorRect/VBoxContainer" unique_id=1828148902]
+layout_mode = 2
+alignment = 1
+
+[node name="Button" type="Button" parent="Node/ColorRect/VBoxContainer/BoxContainer" unique_id=1087179699]
+layout_mode = 2
+theme_override_font_sizes/font_size = 98
+text = "Restart"
+
+[connection signal="pressed" from="Node/ColorRect/VBoxContainer/BoxContainer/Button" to="." method="_on_button_pressed"]
