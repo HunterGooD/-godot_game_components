@@ -14,6 +14,7 @@ var state: RunState = RunState.NOT_STARTED
 
 func _ready() -> void:
 	GameEvents.player_died.connect(_on_player_died)
+	GameEvents.run_victory.connect(_on_run_victory)
 	GameEvents.level_up.connect(_on_level_up)
 	start_run()
 
@@ -66,6 +67,10 @@ func restart_run() -> void:
 
 func _on_player_died(_event: ActorDeathEvent) -> void:
 	fail_run()
+
+
+func _on_run_victory() -> void:
+	victory_run()
 
 
 func _on_level_up(_new_level: int) -> void:

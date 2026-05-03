@@ -4,9 +4,10 @@
 [ext_resource type="PackedScene" uid="uid://c7evpgqq0f7fi" path="res://src/player/base/scenes/player.tscn" id="1_kkvs4"]
 [ext_resource type="PackedScene" uid="uid://1hn5nwslbvid" path="res://src/enemy/base/scenes/base_enemy.tscn" id="2_rr2wm"]
 
-[node name="Main" type="Node2D" unique_id=627861377 node_paths=PackedStringArray("rect")]
+[node name="Main" type="Node2D" unique_id=627861377 node_paths=PackedStringArray("rect", "label")]
 script = ExtResource("1_32aa5")
 rect = NodePath("Node/ColorRect")
+label = NodePath("Node/ColorRect/VBoxContainer/Label")
 
 [node name="Player" parent="." unique_id=1922562164 instance=ExtResource("1_kkvs4")]
 position = Vector2(90, 98)
