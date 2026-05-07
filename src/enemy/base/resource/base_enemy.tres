@@ -4,6 +4,7 @@
 
 [resource]
 script = ExtResource("1_42y4p")
+max_health = 30.0
 move_speed = 250.0
 damage = 5.0
 dash_charges = 0
