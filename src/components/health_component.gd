@@ -2,13 +2,14 @@ class_name HealthComponent
 extends Node
 
 signal hp_change(hp: float, max_hp: float)
-signal dead
+signal dead(damage_payload: DamageInstance)
 
 @export var main_stats: StatsComponent
 
 var max_hp: float = 0.0
 var current_hp: float = 0.0
 var is_dead: bool = false
+var history_damage_taken: Array[DamageInstance] = []
 
 
 func _ready() -> void:
@@ -35,10 +36,12 @@ func apply_damage(damage_payload: DamageInstance) -> void:
 	current_hp = clampf(current_hp, 0.0, max_hp)
 	print("final damage ", damage)
 	hp_change.emit(current_hp, max_hp)
+	
+	history_damage_taken.append(damage_payload)
 
 	if current_hp <= 0.0:
 		is_dead = true
-		dead.emit()
+		dead.emit(damage_payload)
 
 
 func _apply_armor(amount: float) -> float:

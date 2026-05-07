@@ -26,21 +26,14 @@ func set_text(current_hp: float, max_hp: float) -> void:
 	label.text = str(int(current_hp), "/", int(max_hp))
 
 
-func _on_died_signal() -> void:
+func _on_died_signal(damage_payload: DamageInstance) -> void:
 	set_process(false)
 	var event: ActorDeathEvent = ActorDeathEvent.new()
 	event.actor = self
 	event.actor_kind = &"player"
-#	event.killer = NULL # подумать как тут получать того кто убил
+	event.killer = damage_payload.source
 	event.position = position
 	event.xp = 10
-	event.stats_modif = StatModifierInstance.new(
-		StatEnums.StatType.MAX_HEALTH,
-		StatEnums.Mode.FLAT,
-		10.0,
-		&"max_hp_for_kill",
-		[&"kill", &"enemy", &"flat_hp"]
-	)
 
 	GameEvents.player_died.emit(event)
 	queue_free()
