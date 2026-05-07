@@ -36,7 +36,7 @@ func apply_damage(damage_payload: DamageInstance) -> void:
 	current_hp = clampf(current_hp, 0.0, max_hp)
 	print("final damage ", damage)
 	hp_change.emit(current_hp, max_hp)
-	
+
 	history_damage_taken.append(damage_payload)
 
 	if current_hp <= 0.0:
