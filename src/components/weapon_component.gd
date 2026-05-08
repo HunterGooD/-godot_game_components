@@ -4,6 +4,7 @@ extends Node
 signal attack_started
 signal attack_finished
 signal attack_ready
+signal state_changed(previous_state: WeaponState, next_state: WeaponState)
 
 enum WeaponState {
 	READY,
@@ -73,6 +74,8 @@ func _change_state(next_state: WeaponState) -> void:
 	if state == next_state:
 		return
 
+	state_changed.emit(state, next_state)
+	
 	state = next_state
 
 	match state:
