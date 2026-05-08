@@ -76,11 +76,13 @@ func _change_state(next_state: WeaponState) -> void:
 
 	if not _can_transition(state, next_state):
 		push_warning(
-			"Invalid weapon state transition: %s -> %s"
-			% [
-				WeaponState.keys()[state],
-				WeaponState.keys()[next_state],
-			]
+			(
+				"Invalid weapon state transition: %s -> %s"
+				% [
+					WeaponState.keys()[state],
+					WeaponState.keys()[next_state],
+				]
+			)
 		)
 		return
 
@@ -100,7 +102,7 @@ func _change_state(next_state: WeaponState) -> void:
 
 		WeaponState.RECOVERY:
 			_enter_recovery()
-			
+
 
 func _can_transition(from_state: WeaponState, to_state: WeaponState) -> bool:
 	match from_state:
@@ -117,6 +119,7 @@ func _can_transition(from_state: WeaponState, to_state: WeaponState) -> bool:
 			return to_state == WeaponState.READY
 
 	return false
+
 
 func _enter_ready() -> void:
 	attack_ready.emit()
