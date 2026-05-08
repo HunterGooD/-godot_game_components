@@ -74,9 +74,19 @@ func _change_state(next_state: WeaponState) -> void:
 	if state == next_state:
 		return
 
-	state_changed.emit(state, next_state)
-	
+	if not _can_transition(state, next_state):
+		push_warning(
+			"Invalid weapon state transition: %s -> %s"
+			% [
+				WeaponState.keys()[state],
+				WeaponState.keys()[next_state],
+			]
+		)
+		return
+
+	var previous_state := state
 	state = next_state
+	state_changed.emit(previous_state, next_state)
 
 	match state:
 		WeaponState.READY:
@@ -90,7 +100,23 @@ func _change_state(next_state: WeaponState) -> void:
 
 		WeaponState.RECOVERY:
 			_enter_recovery()
+			
 
+func _can_transition(from_state: WeaponState, to_state: WeaponState) -> bool:
+	match from_state:
+		WeaponState.READY:
+			return to_state == WeaponState.STARTUP
+
+		WeaponState.STARTUP:
+			return to_state == WeaponState.ACTIVE
+
+		WeaponState.ACTIVE:
+			return to_state == WeaponState.RECOVERY
+
+		WeaponState.RECOVERY:
+			return to_state == WeaponState.READY
+
+	return false
 
 func _enter_ready() -> void:
 	attack_ready.emit()
