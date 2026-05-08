@@ -1,18 +1,27 @@
 class_name WeaponComponent
 extends Node
 
+signal attack_started
 signal attack_finished
 signal attack_ready
+signal state_changed(previous_state: WeaponState, next_state: WeaponState)
+
+enum WeaponState {
+	READY,
+	STARTUP,
+	ACTIVE,
+	RECOVERY,
+}
 
 @export var hit_box: HitBoxComponent
 @export var main_stats: StatsComponent
 @export var base_weapon_stats: WeaponStatResource
 @export var actor: CharacterBody2D
 
-var attack_available: bool = true
+var state: WeaponState = WeaponState.READY
 var timer_recovery_attack: Timer
 var timer_active_attack: Timer
-var timer_attack_delay: Timer
+var timer_attack_startup: Timer
 
 
 func _ready() -> void:
@@ -33,64 +42,145 @@ func _ready() -> void:
 		return
 
 	timer_recovery_attack = Timer.new()
-	timer_recovery_attack.wait_time = base_weapon_stats.recovery_time
 	timer_recovery_attack.one_shot = true
 	add_child(timer_recovery_attack)
 
 	timer_active_attack = Timer.new()
-	timer_active_attack.wait_time = base_weapon_stats.active_time
 	timer_active_attack.one_shot = true
 	add_child(timer_active_attack)
 
-	timer_attack_delay = Timer.new()
-	timer_attack_delay.wait_time = base_weapon_stats.delay_attack
-	timer_attack_delay.one_shot = true
-	add_child(timer_attack_delay)
+	timer_attack_startup = Timer.new()
+	timer_attack_startup.one_shot = true
+	add_child(timer_attack_startup)
 
-	timer_attack_delay.timeout.connect(_on_attack_delay)
-	timer_active_attack.timeout.connect(_on_attack_timer_timeout)
-	timer_recovery_attack.timeout.connect(_on_colldown_timer_timeout)
+	timer_attack_startup.timeout.connect(_on_attack_startup)
+	timer_active_attack.timeout.connect(_on_active_attack_timer_timeout)
+	timer_recovery_attack.timeout.connect(_on_recovery_timer_timeout)
 
 
 func try_attack() -> bool:
-	if not attack_available:
-		print("attack not available")
+	if state != WeaponState.READY:
 		return false
 
-	if timer_attack_delay == null:
+	if timer_attack_startup == null:
 		push_warning("time attack delay is null in weapon component")
 		return false
 
-	attack_available = false
-	timer_attack_delay.start()
-
+	_change_state(WeaponState.STARTUP)
 	return true
+
+
+func _change_state(next_state: WeaponState) -> void:
+	if state == next_state:
+		return
+
+	if not _can_transition(state, next_state):
+		push_warning(
+			(
+				"Invalid weapon state transition: %s -> %s"
+				% [
+					WeaponState.keys()[state],
+					WeaponState.keys()[next_state],
+				]
+			)
+		)
+		return
+
+	var previous_state := state
+	state = next_state
+	state_changed.emit(previous_state, next_state)
+
+	match state:
+		WeaponState.READY:
+			_enter_ready()
+
+		WeaponState.STARTUP:
+			_enter_startup()
+
+		WeaponState.ACTIVE:
+			_enter_active()
+
+		WeaponState.RECOVERY:
+			_enter_recovery()
+
+
+func _can_transition(from_state: WeaponState, to_state: WeaponState) -> bool:
+	match from_state:
+		WeaponState.READY:
+			return to_state == WeaponState.STARTUP
+
+		WeaponState.STARTUP:
+			return to_state == WeaponState.ACTIVE
+
+		WeaponState.ACTIVE:
+			return to_state == WeaponState.RECOVERY
+
+		WeaponState.RECOVERY:
+			return to_state == WeaponState.READY
+
+	return false
+
+
+func _enter_ready() -> void:
+	attack_ready.emit()
+
+
+func _enter_startup() -> void:
+	attack_started.emit()
+	if base_weapon_stats.delay_attack <= 0.0:
+		_change_state(WeaponState.ACTIVE)
+		return
+
+	timer_attack_startup.start(base_weapon_stats.delay_attack)
+
+
+func _enter_active() -> void:
+	if hit_box == null:
+		return
+
+	hit_box.payload = DamageInstance.new(_get_damage(), actor)
+	hit_box.enable_collision()
+
+	if base_weapon_stats.active_time <= 0.0:
+		_change_state(WeaponState.RECOVERY)
+		return
+
+	timer_active_attack.start(base_weapon_stats.active_time)
+
+
+func _enter_recovery() -> void:
+	if hit_box != null:
+		hit_box.disable_collision()
+
+	attack_finished.emit()
+
+	if base_weapon_stats.recovery_time <= 0.0:
+		_change_state(WeaponState.READY)
+		return
+
+	timer_recovery_attack.start(base_weapon_stats.recovery_time)
 
 
 func _get_damage() -> float:
 	return main_stats.get_damage() + base_weapon_stats.damage
 
 
-func _on_attack_timer_timeout() -> void:
-	if timer_recovery_attack == null:
-		push_warning("timer colldown is null for weapon componment")
+func _on_active_attack_timer_timeout() -> void:
+	if state != WeaponState.ACTIVE:
 		return
 
-	hit_box.disable_collision()
-	attack_finished.emit()
-	timer_recovery_attack.start()
+	_change_state(WeaponState.RECOVERY)
 
 
-func _on_attack_delay() -> void:
-	if timer_active_attack == null:
-		push_warning("timer attacl is null for weapon componment")
+func _on_attack_startup() -> void:
+	if state != WeaponState.STARTUP:
 		return
 
-	hit_box.payload = DamageInstance.new(_get_damage(), actor)
-	hit_box.enable_collision()
-	timer_active_attack.start()
+	_change_state(WeaponState.ACTIVE)
 
 
-func _on_colldown_timer_timeout() -> void:
-	attack_available = true
-	attack_ready.emit()
+func _on_recovery_timer_timeout() -> void:
+	if state != WeaponState.RECOVERY:
+		return
+
+	_change_state(WeaponState.READY)
