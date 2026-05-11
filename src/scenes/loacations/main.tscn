@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://f7u7smexlhty" path="res://src/enemy/base/scripts/main.gd" id="1_32aa5"]
 [ext_resource type="PackedScene" uid="uid://c7evpgqq0f7fi" path="res://src/player/base/scenes/player.tscn" id="1_kkvs4"]
 [ext_resource type="PackedScene" uid="uid://1hn5nwslbvid" path="res://src/enemy/base/scenes/base_enemy.tscn" id="2_rr2wm"]
+[ext_resource type="PackedScene" uid="uid://bw12cvtgihrvk" path="res://src/scenes/objects/projecttiles.tscn" id="4_t8uc6"]
 
 [node name="Main" type="Node2D" unique_id=627861377 node_paths=PackedStringArray("rect", "label")]
 script = ExtResource("1_32aa5")
@@ -45,5 +46,8 @@ alignment = 1
 layout_mode = 2
 theme_override_font_sizes/font_size = 98
 text = "Restart"
+
+[node name="Projectile" parent="." unique_id=43052631 instance=ExtResource("4_t8uc6")]
+position = Vector2(211, 460)
 
 [connection signal="pressed" from="Node/ColorRect/VBoxContainer/BoxContainer/Button" to="." method="_on_button_pressed"]

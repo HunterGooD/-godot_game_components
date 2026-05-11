@@ -1,10 +1,21 @@
 class_name HitBoxComponent
 extends Area2D
 
+signal hit(area2d: Area2D)
+
 @export var offset_collision: Vector2
 
 @export var collision_shape: CollisionShape2D
 var payload: DamageInstance
+
+
+func _ready() -> void:
+	area_entered.connect(_on_area_entered)
+
+
+func _on_area_entered(area2d: Area2D) -> void:
+	if area2d is HurtBoxComponent:
+		hit.emit(area2d)
 
 
 func enable_collision() -> void:

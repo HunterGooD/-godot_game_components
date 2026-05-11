@@ -17,8 +17,11 @@ enum WeaponState {
 @export var main_stats: StatsComponent
 @export var base_weapon_stats: WeaponStatResource
 @export var actor: CharacterBody2D
+@export var list_of_attacks_resources: Array[AttackResource] = []
 
 var state: WeaponState = WeaponState.READY
+var current_attack_idx: int = 0
+var current_attack_resource: AttackResource = null
 var timer_recovery_attack: Timer
 var timer_active_attack: Timer
 var timer_attack_startup: Timer
@@ -74,6 +77,15 @@ func _change_state(next_state: WeaponState) -> void:
 	if state == next_state:
 		return
 
+	print(
+		(
+			"Invalid weapon state transition: %s -> %s"
+			% [
+				WeaponState.keys()[state],
+				WeaponState.keys()[next_state],
+			]
+		)
+	)
 	if not _can_transition(state, next_state):
 		push_warning(
 			(
@@ -127,7 +139,11 @@ func _enter_ready() -> void:
 
 func _enter_startup() -> void:
 	attack_started.emit()
-	if base_weapon_stats.delay_attack <= 0.0:
+	var attack_resource: AttackResource = list_of_attacks_resources[current_attack_idx]
+	current_attack_idx = (current_attack_idx + 1) % len(list_of_attacks_resources)
+	current_attack_resource = attack_resource
+
+	if attack_resource.startup_time <= 0.0:
 		_change_state(WeaponState.ACTIVE)
 		return
 
@@ -135,10 +151,30 @@ func _enter_startup() -> void:
 
 
 func _enter_active() -> void:
+	if current_attack_resource == null:
+		push_warning("attack resource is null ")
+		_change_state(WeaponState.READY)
+		return
+
+	print(current_attack_resource.delivery_type)
+	match current_attack_resource.delivery_type:
+		AttackResource.DeliveryType.MELEE_HITBOX:
+			_start_melee_attack(current_attack_resource)
+		AttackResource.DeliveryType.PROJECTILE:
+			_start_projectile_attack(current_attack_resource)
+
+
+func _start_melee_attack(attack_resource: AttackResource) -> void:
 	if hit_box == null:
 		return
 
-	hit_box.payload = DamageInstance.new(_get_damage(), actor)
+	hit_box.payload = DamageInstance.new(
+		_get_damage(attack_resource),
+		actor,
+		hit_box,
+		attack_resource.damage_tags,
+		attack_resource.status_effects
+	)
 	hit_box.enable_collision()
 
 	if base_weapon_stats.active_time <= 0.0:
@@ -146,6 +182,10 @@ func _enter_active() -> void:
 		return
 
 	timer_active_attack.start(base_weapon_stats.active_time)
+
+
+func _start_projectile_attack(_attack_resource: AttackResource) -> void:
+	pass
 
 
 func _enter_recovery() -> void:
@@ -161,8 +201,8 @@ func _enter_recovery() -> void:
 	timer_recovery_attack.start(base_weapon_stats.recovery_time)
 
 
-func _get_damage() -> float:
-	return main_stats.get_damage() + base_weapon_stats.damage
+func _get_damage(attack_resource: AttackResource) -> float:
+	return main_stats.get_damage() + attack_resource.damage * attack_resource.damage_multiplier
 
 
 func _on_active_attack_timer_timeout() -> void:

@@ -5,7 +5,7 @@
 .mono/
 data_*/
 .import/
-target
+target/
 
 export.cfg
 export_credentials.cfg

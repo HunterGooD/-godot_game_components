@@ -31,7 +31,7 @@ func _on_died_signal(damage_payload: DamageInstance) -> void:
 	var event: ActorDeathEvent = ActorDeathEvent.new()
 	event.actor = self
 	event.actor_kind = &"player"
-	event.killer = damage_payload.source
+	event.killer = damage_payload.attacker
 	event.position = position
 	event.xp = 10
 

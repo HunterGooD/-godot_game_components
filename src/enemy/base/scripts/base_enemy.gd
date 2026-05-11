@@ -32,7 +32,7 @@ func _on_died_signal(damage_payload: DamageInstance) -> void:
 	var event: ActorDeathEvent = ActorDeathEvent.new()
 	event.actor = self
 	event.actor_kind = &"enemy"
-	event.killer = damage_payload.source
+	event.killer = damage_payload.attacker
 	event.position = position
 	event.xp = 10
 	event.stats_modif = StatModifierInstance.new(
@@ -43,6 +43,6 @@ func _on_died_signal(damage_payload: DamageInstance) -> void:
 		[&"kill", &"enemy", &"flat_hp"]
 	)
 
-	print("enemy died from ", damage_payload.source)
+	print("enemy died from ", damage_payload.attacker)
 	GameEvents.enemy_died.emit(event)
 	queue_free()
