@@ -140,6 +140,7 @@ func _apply_speed(effect_def: StatusEffectResource):
 
 func _apply_dot(effect_def: StatusEffectResource, damage: DamageInstance):
 	match effect_def.dot_type:
+		# gdlint:ignore:max-line-length
 		StatusEffectResource.DOTType.POTION, StatusEffectResource.DOTType.FIRE, StatusEffectResource.DOTType.CURSED, StatusEffectResource.DOTType.MADNES:
 			_apply_default_dot(effect_def, damage)
 
