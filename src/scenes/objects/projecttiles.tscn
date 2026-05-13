@@ -16,8 +16,8 @@ scale = Vector2(1.4101561, 0.15327784)
 texture = ExtResource("1_tlrup")
 
 [node name="HitBoxComponent" type="Area2D" parent="." unique_id=2009446025 node_paths=PackedStringArray("collision_shape")]
-collision_layer = 4
-collision_mask = 8
+collision_layer = 0
+collision_mask = 0
 script = ExtResource("2_rvu4w")
 collision_shape = NodePath("CollisionShape2D")
 metadata/_custom_type_script = "uid://cg5f1alah2yup"

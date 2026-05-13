@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://c7evpgqq0f7fi" path="res://src/player/base/scenes/player.tscn" id="1_kkvs4"]
 [ext_resource type="PackedScene" uid="uid://1hn5nwslbvid" path="res://src/enemy/base/scenes/base_enemy.tscn" id="2_rr2wm"]
 [ext_resource type="PackedScene" uid="uid://bw12cvtgihrvk" path="res://src/scenes/objects/projecttiles.tscn" id="4_t8uc6"]
+[ext_resource type="PackedScene" uid="uid://cffphbrg6sdax" path="res://src/scenes/objects/turret.tscn" id="5_4er4f"]
 
 [node name="Main" type="Node2D" unique_id=627861377 node_paths=PackedStringArray("rect", "label")]
 script = ExtResource("1_32aa5")
@@ -14,7 +15,7 @@ label = NodePath("Node/ColorRect/VBoxContainer/Label")
 position = Vector2(90, 98)
 
 [node name="BaseEnemy" parent="." unique_id=1084096259 instance=ExtResource("2_rr2wm")]
-position = Vector2(1762, 461)
+position = Vector2(683, 468)
 
 [node name="Node" type="Node" parent="." unique_id=1555415963]
 process_mode = 2
@@ -48,6 +49,12 @@ theme_override_font_sizes/font_size = 98
 text = "Restart"
 
 [node name="Projectile" parent="." unique_id=43052631 instance=ExtResource("4_t8uc6")]
-position = Vector2(211, 460)
+position = Vector2(97, 474)
+
+[node name="BaseEnemy2" parent="." unique_id=404395743 instance=ExtResource("2_rr2wm")]
+position = Vector2(412.00003, 473)
+
+[node name="turret" parent="." unique_id=167934815 instance=ExtResource("5_4er4f")]
+position = Vector2(1483, 307)
 
 [connection signal="pressed" from="Node/ColorRect/VBoxContainer/BoxContainer/Button" to="." method="_on_button_pressed"]

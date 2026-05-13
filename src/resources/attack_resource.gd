@@ -18,5 +18,4 @@ enum DeliveryType {
 @export var recovery_time := 0.3
 
 @export var projectile_resource: ProjectileResource
-#
 @export var status_effects: Array[StatusEffectResource] = []

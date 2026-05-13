@@ -67,6 +67,7 @@ radius = 126.57014
 radius = 173.66203
 
 [node name="BaseEnemy" type="CharacterBody2D" unique_id=1084096259 node_paths=PackedStringArray("main_stats", "label", "healt_component")]
+scale = Vector2(0.8, 0.8)
 collision_layer = 4160
 collision_mask = 4097
 motion_mode = 1
@@ -77,13 +78,16 @@ healt_component = NodePath("Components/HealthComponent")
 
 [node name="Icon" type="Sprite2D" parent="." unique_id=246674871]
 modulate = Color(0.6901961, 0.60784316, 0, 1)
+scale = Vector2(0.8, 0.8)
 texture = ExtResource("1_rup1p")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1152959792]
 position = Vector2(-1, -1.5)
+scale = Vector2(0.8, 0.8)
 shape = SubResource("RectangleShape2D_1irbq")
 
 [node name="HurtBoxComponent" type="Area2D" parent="." unique_id=543646958 node_paths=PackedStringArray("health_component")]
+scale = Vector2(0.8, 0.8)
 collision_layer = 8
 collision_mask = 4
 script = ExtResource("6_c0wci")
@@ -92,6 +96,7 @@ metadata/_custom_type_script = "uid://dxb7pvo4ljcls"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBoxComponent" unique_id=1373546523]
 position = Vector2(0, -0.5)
+scale = Vector2(0.8, 0.8)
 shape = SubResource("RectangleShape2D_c0wci")
 debug_color = Color(0.66295314, 0.5135215, 0, 0.41960785)
 
@@ -100,6 +105,7 @@ offset_left = -31.0
 offset_top = -93.0
 offset_right = 31.0
 offset_bottom = -70.0
+scale = Vector2(0.8, 0.8)
 metadata/_edit_use_anchors_ = true
 
 [node name="Components" type="Node" parent="." unique_id=346621646]
@@ -150,33 +156,40 @@ move_direction = NodePath("../EnemyAiComponent")
 metadata/_custom_type_script = "uid://y1iqeamltkf3"
 
 [node name="AgroDetectionComponent" type="Area2D" parent="." unique_id=1744180741]
+scale = Vector2(0.8, 0.8)
 collision_layer = 4096
 collision_mask = 8192
 script = ExtResource("12_w0hon")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AgroDetectionComponent" unique_id=32566466]
+scale = Vector2(0.8, 0.8)
 shape = SubResource("CircleShape2D_7hmfk")
 debug_color = Color(0.6064978, 0.532001, 0.28169528, 0.41960785)
 
 [node name="LoseDetectionComponent" type="Area2D" parent="." unique_id=318210583]
+scale = Vector2(0.8, 0.8)
 collision_layer = 4096
 collision_mask = 8192
 script = ExtResource("12_w0hon")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="LoseDetectionComponent" unique_id=937626595]
+scale = Vector2(0.8, 0.8)
 shape = SubResource("CircleShape2D_w0hon")
 debug_color = Color(0, 0.64318174, 0.31022352, 0.41960785)
 
 [node name="AttackDetectionComponent" type="Area2D" parent="." unique_id=1863431072]
+scale = Vector2(0.8, 0.8)
 collision_layer = 4096
 collision_mask = 8192
 script = ExtResource("12_w0hon")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AttackDetectionComponent" unique_id=802833423]
+scale = Vector2(0.8, 0.8)
 shape = SubResource("CircleShape2D_s2kqi")
 debug_color = Color(0.15569276, 0.5733795, 0.79959935, 0.41960785)
 
 [node name="HitBoxComponent" type="Area2D" parent="." unique_id=1308010012 node_paths=PackedStringArray("collision_shape")]
+scale = Vector2(0.8, 0.8)
 collision_layer = 16
 collision_mask = 2
 script = ExtResource("2_dh483")
@@ -185,6 +198,7 @@ metadata/_custom_type_script = "uid://cg5f1alah2yup"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitBoxComponent" unique_id=1625684110]
 position = Vector2(-0.5, -0.5)
+scale = Vector2(0.8, 0.8)
 shape = SubResource("CircleShape2D_ct7tj")
 disabled = true
 debug_color = Color(0.8589008, 8.374751e-06, 0.56415135, 0.41960785)

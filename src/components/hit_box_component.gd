@@ -3,9 +3,11 @@ extends Area2D
 
 signal hit(area2d: Area2D)
 
-@export var offset_collision: Vector2
+const DISABLED_PROPERTY: StringName = &"disabled"
 
+@export var offset_collision: Vector2
 @export var collision_shape: CollisionShape2D
+
 var payload: DamageInstance
 
 
@@ -22,14 +24,14 @@ func enable_collision() -> void:
 	if collision_shape == null:
 		return
 
-	collision_shape.disabled = false
+	collision_shape.set_deferred(DISABLED_PROPERTY, false)
 
 
 func disable_collision() -> void:
 	if collision_shape == null:
 		return
 
-	collision_shape.disabled = true
+	collision_shape.set_deferred(DISABLED_PROPERTY, true)
 
 
 func flip_collision(facing: DirectionEnums.Facing) -> void:

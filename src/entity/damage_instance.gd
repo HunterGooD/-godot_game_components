@@ -17,6 +17,6 @@ func _init(
 ) -> void:
 	amount = _amount
 	attacker = _attacker
-	_source = _source
+	source = _source
 	tags = _tags
 	status_effects = _status_effects

@@ -6,36 +6,34 @@ signal finished(projectile: Projectile)
 @export var hit_box: HitBoxComponent
 
 var direction: Vector2 = Vector2.RIGHT
-var speed: float = 600.0
-var lifetime: float = 3.0
+var main_stat: ProjetileStatInstanse
 
 var _life_time_left: float = 0.0
+var _hits_count := 0
 var _is_active := false
 
 
 func _ready() -> void:
-	setup(
-		position,
-		direction,
-		speed,
-		3.0,
-		DamageInstance.new(1.0, self, self),
-	)
+	if hit_box == null:
+		push_warning("hit_box is null in Projectile")
+		return
 	hit_box.hit.connect(_on_hit)
+	hit_box.disable_collision()
+
 
 
 func setup(
 	start_position: Vector2,
 	start_direction: Vector2,
-	projectile_speed: float,
-	projectile_lifetime: float,
+	projectile_stat: ProjetileStatInstanse,
+	layer: int,
+	mask: int,
 	damage: DamageInstance
 ) -> void:
 	global_position = start_position
 	direction = start_direction.normalized()
-	speed = projectile_speed
-	lifetime = projectile_lifetime
-	_life_time_left = lifetime
+	main_stat = projectile_stat
+	_life_time_left = main_stat.lifetime
 	_is_active = true
 
 	if direction != Vector2.ZERO:
@@ -43,6 +41,8 @@ func setup(
 
 	if hit_box != null:
 		hit_box.payload = damage
+		hit_box.set_collision_layer_value(layer, true)
+		hit_box.set_collision_mask_value(mask, true)
 		hit_box.enable_collision()
 
 
@@ -50,7 +50,7 @@ func _physics_process(delta: float) -> void:
 	if not _is_active:
 		return
 
-	global_position += direction * speed * delta
+	global_position += direction * main_stat.speed * delta
 
 	_life_time_left -= delta
 	if _life_time_left <= 0.0:
@@ -58,7 +58,14 @@ func _physics_process(delta: float) -> void:
 
 
 func _on_hit(_area2d: Area2D) -> void:
-	_finish()
+	_hits_count += 1
+
+	if main_stat.destroy_on_hit:
+		_finish()
+		return
+
+	if main_stat.max_hits >= 0 and _hits_count >= main_stat.max_hits:
+		_finish()
 
 
 func _finish() -> void:
@@ -66,6 +73,8 @@ func _finish() -> void:
 		return
 
 	set_process(false)
+	set_physics_process(false)
+
 	_is_active = false
 
 	finished.emit(self)
