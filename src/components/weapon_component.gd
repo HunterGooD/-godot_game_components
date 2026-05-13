@@ -190,6 +190,7 @@ func _start_melee_attack(attack_resource: AttackResource) -> void:
 
 	timer_active_attack.start(current_attack_resource.active_time)
 
+
 func _start_projectile_attack(_attack_resource: AttackResource) -> void:
 	if _attack_resource.projectile_resource == null:
 		push_warning("not found projectile resource in weapon ")
@@ -205,34 +206,41 @@ func _start_projectile_attack(_attack_resource: AttackResource) -> void:
 		_change_state(WeaponState.RECOVERY)
 		return
 	get_tree().current_scene.add_child(projectile)
-	
-	projectile.setup(
-		marker.global_position,
-		direction,
-		ProjetileStatInstanse.new(
-			projectile_resource.id,
-			projectile_resource.speed,
-			projectile_resource.lifetime,
-			projectile_resource.destroy_on_hit,
-			projectile_resource.max_hits,
-		),
-#		hit_box.collision_layer,
-#		hit_box.collision_mask,
-		projectile_resource.layer,
-		projectile_resource.mask,
-		DamageInstance.new(
-			_get_damage(_attack_resource),
-			actor,
-			projectile,
-			_attack_resource.damage_tags,
-			_attack_resource.status_effects
-		),
+
+	(
+		projectile
+		. setup(
+			marker.global_position,
+			direction,
+			(
+				ProjetileStatInstanse
+				. new(
+					projectile_resource.id,
+					projectile_resource.speed,
+					projectile_resource.lifetime,
+					projectile_resource.destroy_on_hit,
+					projectile_resource.max_hits,
+				)
+			),
+			#		hit_box.collision_layer,
+			#		hit_box.collision_mask,
+			projectile_resource.layer,
+			projectile_resource.mask,
+			DamageInstance.new(
+				_get_damage(_attack_resource),
+				actor,
+				projectile,
+				_attack_resource.damage_tags,
+				_attack_resource.status_effects
+			),
+		)
 	)
 	if _attack_resource.active_time <= 0.0:
 		_change_state(WeaponState.RECOVERY)
 		return
 
 	timer_active_attack.start(_attack_resource.active_time)
+
 
 func _get_attack_direction() -> Vector2:
 	if marker != null:
@@ -241,6 +249,7 @@ func _get_attack_direction() -> Vector2:
 		if direction != Vector2.ZERO:
 			return direction.normalized()
 	return Vector2.RIGHT
+
 
 func _enter_recovery() -> void:
 	if hit_box != null:

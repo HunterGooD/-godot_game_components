@@ -1,0 +1,77 @@
+[gd_scene format=3 uid="uid://cffphbrg6sdax"]
+
+[ext_resource type="Script" uid="uid://b0vxg8r6ub7o8" path="res://src/scripts/turret.gd" id="1_do1h0"]
+[ext_resource type="Script" uid="uid://cwibng423aovi" path="res://src/components/weapon_component.gd" id="1_sk23y"]
+[ext_resource type="Script" uid="uid://dc1lhk6ik1j3d" path="res://src/resources/weapon_stat_resource.gd" id="2_do1h0"]
+[ext_resource type="Script" uid="uid://bxnkxo5o1xi8r" path="res://src/resources/attack_resource.gd" id="3_adjfq"]
+[ext_resource type="PackedScene" uid="uid://bw12cvtgihrvk" path="res://src/scenes/objects/projecttiles.tscn" id="4_uabln"]
+[ext_resource type="Script" uid="uid://cru28k1sn7mqi" path="res://src/resources/projectile_resource.gd" id="5_vw7sw"]
+[ext_resource type="Script" uid="uid://duqf28p5l54wg" path="res://src/resources/status_effect_resource.gd" id="6_6y5qb"]
+[ext_resource type="Script" uid="uid://bebnl6ixknhht" path="res://src/components/stats_component.gd" id="7_3a374"]
+[ext_resource type="Script" uid="uid://bd2sc2tic323x" path="res://src/resources/actor_stats_resource.gd" id="8_uvako"]
+
+[sub_resource type="Resource" id="Resource_ejiim"]
+script = ExtResource("2_do1h0")
+metadata/_custom_type_script = "uid://dc1lhk6ik1j3d"
+
+[sub_resource type="Resource" id="Resource_do1h0"]
+script = ExtResource("5_vw7sw")
+id = &"project_base"
+projectile_scene = ExtResource("4_uabln")
+layer = 5
+mask = 2
+metadata/_custom_type_script = "uid://cru28k1sn7mqi"
+
+[sub_resource type="Resource" id="Resource_adjfq"]
+script = ExtResource("3_adjfq")
+id = &"projectile_attack"
+delivery_type = 1
+projectile_resource = SubResource("Resource_do1h0")
+metadata/_custom_type_script = "uid://bxnkxo5o1xi8r"
+
+[sub_resource type="Resource" id="Resource_a7mdu"]
+script = ExtResource("8_uvako")
+move_speed = 0.0
+damage = 1.0
+dash_charges = 0
+metadata/_custom_type_script = "uid://bd2sc2tic323x"
+
+[node name="turret" type="Node2D" unique_id=167934815 node_paths=PackedStringArray("marker", "weapon")]
+script = ExtResource("1_do1h0")
+marker = NodePath("Marker2D")
+weapon = NodePath("WeaponComponent")
+
+[node name="WeaponComponent" type="Node" parent="." unique_id=1681278362 node_paths=PackedStringArray("marker", "main_stats")]
+script = ExtResource("1_sk23y")
+marker = NodePath("../Marker2D")
+main_stats = NodePath("../StatsComponent")
+base_weapon_stats = SubResource("Resource_ejiim")
+list_of_attacks_resources = Array[ExtResource("3_adjfq")]([SubResource("Resource_adjfq")])
+metadata/_custom_type_script = "uid://cwibng423aovi"
+
+[node name="StatsComponent" type="Node" parent="." unique_id=1232505534]
+script = ExtResource("7_3a374")
+base_stats = SubResource("Resource_a7mdu")
+metadata/_custom_type_script = "uid://bebnl6ixknhht"
+
+[node name="Marker2D" type="Marker2D" parent="." unique_id=2042510845]
+position = Vector2(26, 0)
+
+[node name="ColorRect" type="ColorRect" parent="Marker2D" unique_id=1032989027]
+offset_left = -8.0
+offset_top = -8.0
+offset_right = 8.0
+offset_bottom = 10.0
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1245561312]
+offset_left = -4.0
+offset_top = -4.0
+offset_right = 3.0
+offset_bottom = 4.0
+color = Color(0.89095163, 0.51914096, 0, 1)
+
+[node name="Timer" type="Timer" parent="." unique_id=657231019]
+wait_time = 1.5
+autostart = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

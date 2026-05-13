@@ -21,7 +21,6 @@ func _ready() -> void:
 	hit_box.disable_collision()
 
 
-
 func setup(
 	start_position: Vector2,
 	start_direction: Vector2,

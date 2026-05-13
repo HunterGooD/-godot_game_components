@@ -6,7 +6,7 @@ extends Resource
 @export var projectile_scene: PackedScene = null
 
 @export var layer: int
-@export var mask: int 
+@export var mask: int
 
 @export var speed := 600.0
 @export var lifetime := 3.0
