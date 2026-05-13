@@ -1,24 +1,37 @@
 class_name HitBoxComponent
 extends Area2D
 
-@export var offset_collision: Vector2
+signal hit(area2d: Area2D)
 
+const DISABLED_PROPERTY: StringName = &"disabled"
+
+@export var offset_collision: Vector2
 @export var collision_shape: CollisionShape2D
+
 var payload: DamageInstance
+
+
+func _ready() -> void:
+	area_entered.connect(_on_area_entered)
+
+
+func _on_area_entered(area2d: Area2D) -> void:
+	if area2d is HurtBoxComponent:
+		hit.emit(area2d)
 
 
 func enable_collision() -> void:
 	if collision_shape == null:
 		return
 
-	collision_shape.disabled = false
+	collision_shape.set_deferred(DISABLED_PROPERTY, false)
 
 
 func disable_collision() -> void:
 	if collision_shape == null:
 		return
 
-	collision_shape.disabled = true
+	collision_shape.set_deferred(DISABLED_PROPERTY, true)
 
 
 func flip_collision(facing: DirectionEnums.Facing) -> void:

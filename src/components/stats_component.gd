@@ -31,7 +31,9 @@ func get_stat(stat_id: StatEnums.StatType) -> float:
 
 	for mod in modifiers:
 		if mod.stat_type == stat_id and mod.mode == StatEnums.Mode.MULTIPLY:
-			value *= (1.0 + mod.value)
+			# NOTE: значение уже должно приходить либо 1.2 увеличение на 20 либо 0.2 уменьшение на 20 или
+			# TODO: maybe добавить в StatModifier enum positive, negative
+			value *= mod.value
 
 	return value
 

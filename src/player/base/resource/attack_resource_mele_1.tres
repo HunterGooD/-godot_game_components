@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="AttackResource" format=3 uid="uid://cvu00cxtnav4a"]
+
+[ext_resource type="Script" uid="uid://bxnkxo5o1xi8r" path="res://src/resources/attack_resource.gd" id="1_nnfnd"]
+[ext_resource type="Script" uid="uid://duqf28p5l54wg" path="res://src/resources/status_effect_resource.gd" id="2_rhtgn"]
+
+[resource]
+script = ExtResource("1_nnfnd")
+id = &"player_combo_mele_1"
+damage = 10.0
+active_time = 0.8
+metadata/_custom_type_script = "uid://bxnkxo5o1xi8r"

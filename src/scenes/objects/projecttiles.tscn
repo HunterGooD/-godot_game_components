@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://bw12cvtgihrvk"]
+
+[ext_resource type="Texture2D" uid="uid://ca0e50i5oy880" path="res://icon.svg" id="1_tlrup"]
+[ext_resource type="Script" uid="uid://dyy36rkdn8hjx" path="res://src/scripts/projecttiles.gd" id="1_y3xua"]
+[ext_resource type="Script" uid="uid://cg5f1alah2yup" path="res://src/components/hit_box_component.gd" id="2_rvu4w"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tiec3"]
+size = Vector2(172, 16)
+
+[node name="Projectile" type="Node2D" unique_id=43052631 node_paths=PackedStringArray("hit_box")]
+script = ExtResource("1_y3xua")
+hit_box = NodePath("HitBoxComponent")
+
+[node name="Icon" type="Sprite2D" parent="." unique_id=218569932]
+scale = Vector2(1.4101561, 0.15327784)
+texture = ExtResource("1_tlrup")
+
+[node name="HitBoxComponent" type="Area2D" parent="." unique_id=2009446025 node_paths=PackedStringArray("collision_shape")]
+collision_layer = 0
+collision_mask = 0
+script = ExtResource("2_rvu4w")
+collision_shape = NodePath("CollisionShape2D")
+metadata/_custom_type_script = "uid://cg5f1alah2yup"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitBoxComponent" unique_id=287746172]
+position = Vector2(2, 0)
+shape = SubResource("RectangleShape2D_tiec3")
+debug_color = Color(0.92949355, 0.016922291, 0.65574306, 0.41960785)

@@ -11,10 +11,13 @@
 [ext_resource type="Script" uid="uid://cwibng423aovi" path="res://src/components/weapon_component.gd" id="7_17xtp"]
 [ext_resource type="Script" uid="uid://dkr7ah2w28l73" path="res://src/components/combat_component.gd" id="8_aorow"]
 [ext_resource type="Resource" uid="uid://dvfn7htgoas32" path="res://src/player/base/resource/base_weapon_player.tres" id="8_k80la"]
+[ext_resource type="Script" uid="uid://bxnkxo5o1xi8r" path="res://src/resources/attack_resource.gd" id="9_ixvf3"]
 [ext_resource type="Script" uid="uid://c4elrlirrsy0c" path="res://src/components/action_component.gd" id="9_k80la"]
+[ext_resource type="Resource" uid="uid://cvu00cxtnav4a" path="res://src/player/base/resource/attack_resource_mele_1.tres" id="10_ixvf3"]
 [ext_resource type="Script" uid="uid://cg5f1alah2yup" path="res://src/components/hit_box_component.gd" id="10_qyjrk"]
 [ext_resource type="Script" uid="uid://dxouiqqvauj5" path="res://src/components/direction_component.gd" id="11_5j6mq"]
 [ext_resource type="Script" uid="uid://d3edg0nruhurm" path="res://src/components/reward_component.gd" id="12_6qwt8"]
+[ext_resource type="Script" uid="uid://dk66p8h1yfql7" path="res://src/components/status_effect_receiver_component.gd" id="15_2b8pq"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_svyy7"]
 size = Vector2(115, 115)
@@ -62,6 +65,7 @@ hit_box = NodePath("../../HitBoxComponent")
 main_stats = NodePath("../StatsComponent")
 base_weapon_stats = ExtResource("8_k80la")
 actor = NodePath("../..")
+list_of_attacks_resources = Array[ExtResource("9_ixvf3")]([ExtResource("10_ixvf3")])
 metadata/_custom_type_script = "uid://cwibng423aovi"
 
 [node name="CombatComponent" type="Node" parent="Components" unique_id=1290999527 node_paths=PackedStringArray("weapon_component", "action_component")]
@@ -84,6 +88,12 @@ action_component = NodePath("../ActionComponent")
 script = ExtResource("12_6qwt8")
 main_stats = NodePath("../StatsComponent")
 
+[node name="StatusEffectReceiverComponent" type="Node" parent="Components" unique_id=796530448 node_paths=PackedStringArray("main_stats", "health_component")]
+script = ExtResource("15_2b8pq")
+main_stats = NodePath("../StatsComponent")
+health_component = NodePath("../HealthComponent")
+metadata/_custom_type_script = "uid://dk66p8h1yfql7"
+
 [node name="Icon" type="Sprite2D" parent="." unique_id=1651332600]
 texture = ExtResource("6_svyy7")
 
@@ -91,11 +101,12 @@ texture = ExtResource("6_svyy7")
 position = Vector2(-0.5, 0.5)
 shape = SubResource("RectangleShape2D_svyy7")
 
-[node name="HurtBoxComponent" type="Area2D" parent="." unique_id=1412644662 node_paths=PackedStringArray("health_component")]
+[node name="HurtBoxComponent" type="Area2D" parent="." unique_id=1412644662 node_paths=PackedStringArray("health_component", "status_effect_receiver")]
 collision_layer = 2
 collision_mask = 16
 script = ExtResource("6_1jmbm")
 health_component = NodePath("../Components/HealthComponent")
+status_effect_receiver = NodePath("../Components/StatusEffectReceiverComponent")
 metadata/_custom_type_script = "uid://dxb7pvo4ljcls"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBoxComponent" unique_id=1365908423]
